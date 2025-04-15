@@ -11,10 +11,21 @@ pub struct Todo {
     pub inserted_at: String,
 }
 
-const API_URL: &str = "http://localhost:8000/rest/v1/todos";
-const API_KEY: &str = "SUPABASE_KEY";
 
 pub async fn create_todo(task: &str) -> Result<Todo> {
+    
+    let API_URL = {
+        match std::env::var("API_URL") {
+            Ok(url) => Box::leak(url.into_boxed_str()),
+            Err(_) => "http://localhost:8000/rest/v1/todos",
+        }
+    };
+    let API_KEY= {
+        match std::env::var("API_KEY") {
+            Ok(key) => Box::leak(key.into_boxed_str()),
+            Err(_) => "SUPABASE_KEY",
+        }
+    };
     let client = reqwest::Client::new();
     let response = client
         .post(API_URL)
@@ -35,6 +46,20 @@ pub async fn create_todo(task: &str) -> Result<Todo> {
 }
 
 pub async fn read_todos() -> Result<Vec<Todo>> {
+    
+    let API_URL = {
+        match std::env::var("API_URL") {
+            Ok(url) => Box::leak(url.into_boxed_str()),
+            Err(_) => "http://localhost:8000/rest/v1/todos",
+        }
+    };
+    let API_KEY= {
+        match std::env::var("API_KEY") {
+            Ok(key) => Box::leak(key.into_boxed_str()),
+            Err(_) => "SUPABASE_KEY",
+        }
+    };
+
     let client = reqwest::Client::new();
     let response = client
         .get(format!("{}?select={}", API_URL, "*") )
@@ -53,6 +78,19 @@ pub async fn read_todos() -> Result<Vec<Todo>> {
 }
 
 pub async fn update_todo(id: i32, task: &str, is_complete: bool) -> Result<Todo> {
+    let API_URL = {
+        match std::env::var("API_URL") {
+            Ok(url) => Box::leak(url.into_boxed_str()),
+            Err(_) => "http://localhost:8000/rest/v1/todos",
+        }
+    };
+    let API_KEY= {
+        match std::env::var("API_KEY") {
+            Ok(key) => Box::leak(key.into_boxed_str()),
+            Err(_) => "SUPABASE_KEY",
+        }
+    };
+
     let client = reqwest::Client::new();
     let url = format!("{}?id=eq.{}", API_URL, id);
     let response = client
@@ -74,6 +112,20 @@ pub async fn update_todo(id: i32, task: &str, is_complete: bool) -> Result<Todo>
 }
 
 pub async fn delete_todo(id: i32) -> Result<()> {
+    
+    let API_URL = {
+        match std::env::var("API_URL") {
+            Ok(url) => Box::leak(url.into_boxed_str()),
+            Err(_) => "http://localhost:8000/rest/v1/todos",
+        }
+    };
+    let API_KEY= {
+        match std::env::var("API_KEY") {
+            Ok(key) => Box::leak(key.into_boxed_str()),
+            Err(_) => "SUPABASE_KEY",
+        }
+    };
+    
     let client = reqwest::Client::new();
     let url = format!("{}?id=eq.{}", API_URL, id);
     let response = client
