@@ -1,5 +1,5 @@
+
 use serde::{Deserialize, Serialize};
-use serde_json::Value;
 use anyhow::{Result, anyhow};
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -12,7 +12,7 @@ pub struct Todo {
 }
 
 
-pub async fn create_todo(task: &str) -> Result<Todo> {
+pub async fn create_todo(task: &str) -> Result<()> {
     
     let API_URL = {
         match std::env::var("API_URL") {
@@ -33,13 +33,12 @@ pub async fn create_todo(task: &str) -> Result<Todo> {
         .header("Authorization", format!("Bearer {}", API_KEY))
         .header("Content-Type", "application/json")
         .header("Prefer", "return=representation")
-        .body(serde_json::json!({ "task": task }).to_string())
+        .body(serde_json::json!({ "task": task,"user_id": "d85345e0-eca0-4d11-963e-d143016c33dd" }).to_string())
         .send()
         .await?;
 
     if response.status().is_success() {
-        let todo: Todo = response.json().await?;
-        Ok(todo)
+        Ok(())
     } else {
         Err(anyhow!("Create todo failed with status: {}", response.status()))
     }
